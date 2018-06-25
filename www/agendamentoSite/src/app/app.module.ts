@@ -8,7 +8,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { CalendarModule } from 'angular-calendar';
+import localePt from '@angular/common/locales/de';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -20,7 +24,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot()
+    // BrowserAnimationsModule,
+    NgbModule.forRoot(),
+    // CalendarModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
