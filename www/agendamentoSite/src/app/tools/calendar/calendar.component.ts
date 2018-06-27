@@ -13,8 +13,8 @@ import { } from 'dhtmlxscheduler';
 export class CalendarComponent implements OnInit {
 
   event: Event[] = [
-    { id: "1", start_date: "2018-06-26 14:00", end_date: "2018-06-26 18:00", text: "Event 1" },
-    { id: "2", start_date: "2018-06-26 16:00", end_date: "2018-06-26 17:00", text: "Event 2" },
+    { id: '1', start_date: '2018-06-26 14:00', end_date: '2018-06-26 18:00', text: 'Event 1' },
+    { id: '2', start_date: '2018-06-26 16:00', end_date: '2018-06-26 17:00', text: 'Event 2' },
   ]
 
   @ViewChild('agenda') schedulerContainer: ElementRef;
@@ -27,7 +27,7 @@ export class CalendarComponent implements OnInit {
 
       scheduler.init(this.schedulerContainer.nativeElement, new Date());
 
-      scheduler.parse(this.event, "json");
+      scheduler.parse(this.event, 'json');
 
       // scheduler.attachEvent('onEventAdded', (id, ev) => {
       //     this.eventService.insert(this.serializeEvent(ev, true))
