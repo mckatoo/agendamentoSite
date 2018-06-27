@@ -1,74 +1,110 @@
-import { AgendaService } from './../../services/agenda.service';
-import { Event } from './../../models/event';
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import 'dhtmlx-scheduler';
-import { } from 'dhtmlxscheduler';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FullCalendarModule } from 'ng-fullcalendar';
+import { Options } from 'fullcalendar';
 
 @Component({
-  encapsulation: ViewEncapsulation.None,
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.styl']
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.styl']
 })
 export class CalendarComponent implements OnInit {
 
-  event: Event[] = [
-    { id: '1', start_date: '2018-06-26 14:00', end_date: '2018-06-26 18:00', text: 'Event 1' },
-    { id: '2', start_date: '2018-06-26 16:00', end_date: '2018-06-26 17:00', text: 'Event 2' },
-  ]
+    dateObj = new Date();
+    yearMonth = this.dateObj.getUTCFullYear() + '-' + (this.dateObj.getUTCMonth() + 1);
 
-  @ViewChild('agenda') schedulerContainer: ElementRef;
+    events = [{
+        title: 'All Day Event',
+        start: this.yearMonth + '-01',
+        color: 'yellow !important'
+    },
+    {
+        title: 'Long Event',
+        start: this.yearMonth + '-07',
+        end: this.yearMonth + '-10',
+        color: 'red !important'
+    },
+    {
+        id: 999,
+        title: 'Repeating Event',
+        start: this.yearMonth + '-09T16:00:00',
+        color: 'blue !important'
+    },
+    {
+        id: 999,
+        title: 'Repeating Event',
+        start: this.yearMonth + '-16T16:00:00',
+        color: 'cyan !important'
+    },
+    {
+        title: 'Conference',
+        start: this.yearMonth + '-11',
+        end: this.yearMonth + '-13',
+        color: 'black !important'
+    },
+    {
+        title: 'Meeting',
+        start: this.yearMonth + '-12T10:30:00',
+        end: this.yearMonth + '-12T12:30:00',
+        color: 'purple !important'
+    },
+    {
+        title: 'Lunch',
+        start: this.yearMonth + '-12T12:00:00',
+        color: 'orange !important'
+    },
+    {
+        title: 'Meeting',
+        start: this.yearMonth + '-12T14:30:00',
+        color: 'pink !important'
+    },
+    {
+        title: 'Happy Hour',
+        start: this.yearMonth + '-12T17:30:00',
+        color: 'orange !important'
+    },
+    {
+        title: 'Dinner',
+        start: this.yearMonth + '-12T20:00:00',
+        color: 'brown !important'
+    },
+    {
+        title: 'Birthday Party',
+        start: this.yearMonth + '-13T07:00:00',
+        color: 'pink !important'
+    },
+    {
+        title: 'Click for Google',
+        url: 'http://google.com/',
+        start: this.yearMonth + '-28',
+        color: 'purple !important'
+    }];
 
-  constructor() { }
-
-  ngOnInit() {
-      scheduler.config.xml_date = '%Y-%m-%d %H:%i';
-
-
-      scheduler.init(this.schedulerContainer.nativeElement, new Date());
-
-      scheduler.parse(this.event, 'json');
-
-      // scheduler.attachEvent('onEventAdded', (id, ev) => {
-      //     this.eventService.insert(this.serializeEvent(ev, true))
-      //         .then((response) => {
-      //             if (response.id !== id) {
-      //                 scheduler.changeEventId(id, response.id);
-      //             }
-      //         });
-      // });
-
-      // scheduler.attachEvent('onEventChanged', (id, ev) => {
-      //     this.eventService.update(this.serializeEvent(ev));
-      // });
-
-      // scheduler.attachEvent('onEventDeleted', (id) => {
-      //     this.eventService.remove(id);
-      // });
-
-      // this.eventService.get()
-      //     .then((data) => {
-      //         scheduler.parse(data, 'json');
-      //     });
-  }
-
-  private serializeEvent(data: any, insert: boolean = false): Event {
-      const result = {};
-
-      for (let i in data) {
-          if (i.charAt(0) === '$' || i.charAt(0) === '_') {
-              continue;
-          }
-          if (insert && i === 'id') {
-              continue;
-          }
-          if (data[i] instanceof Date) {
-              result[i] = scheduler.templates.xml_format(data[i]);
-          } else {
-              result[i] = data[i];
-          }
-      }
-      return result as Event;
-  }
+    calendarOptions: Options;
+    @ViewChild(FullCalendarModule) ucCalendar: FullCalendarModule;
+    constructor() { }
+    ngOnInit() {
+        // this.eventService.getEvents().subscribe(data => {
+          this.calendarOptions = {
+            editable: true,
+            eventLimit: false,
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'month,agendaWeek,agendaDay,listMonth'
+            },
+            selectable: true,
+            // events: [],
+            events: this.events
+            };
+        // });
+    }
+    clearEvents() {
+        this.events = [];
+    }
+    loadEvents() {
+        // this.eventService.getEvents().subscribe(data => {
+        //   this.events = data;
+        // });
+    }
 
 }

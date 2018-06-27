@@ -27,13 +27,19 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/dhtmlx-scheduler/codebase/dhtmlxscheduler.css",
-              "src/styles.styl",
-              {
-                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
-              }
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/fullcalendar/dist/fullcalendar.min.css",
+              "node_modules/fullcalendar/dist/fullcalendar.print.min.css",
+              "src/styles.styl"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/moment/min/moment.min.js",
+              "node_modules/fullcalendar/dist/fullcalendar.min.js",
+              "node_modules/fullcalendar/dist/locale/pt-br.js"
+            ]
           },
           "configurations": {
             "production": {

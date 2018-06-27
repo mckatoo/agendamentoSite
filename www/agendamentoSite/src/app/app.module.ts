@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { FullCalendarModule } from 'ng-fullcalendar';
+
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminComponent } from './admin/admin.component';
 import { CalendarComponent } from './tools/calendar/calendar.component';
 
@@ -14,7 +15,7 @@ import { CalendarComponent } from './tools/calendar/calendar.component';
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot()
+    FullCalendarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
