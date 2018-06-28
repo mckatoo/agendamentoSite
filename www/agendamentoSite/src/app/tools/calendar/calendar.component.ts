@@ -1,110 +1,163 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FullCalendarModule } from 'ng-fullcalendar';
-import { Options } from 'fullcalendar';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef
+} from '@angular/core';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import { Subject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent
+} from 'angular-calendar';
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
 
 @Component({
-    selector: 'app-calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.styl']
+  selector: 'app-calendar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.styl']
 })
 export class CalendarComponent implements OnInit {
 
-    dateObj = new Date();
-    yearMonth = this.dateObj.getUTCFullYear() + '-' + (this.dateObj.getUTCMonth() + 1);
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-    events = [{
-        title: 'All Day Event',
-        start: this.yearMonth + '-01',
-        color: 'yellow !important'
-    },
-    {
-        title: 'Long Event',
-        start: this.yearMonth + '-07',
-        end: this.yearMonth + '-10',
-        color: 'red !important'
-    },
-    {
-        id: 999,
-        title: 'Repeating Event',
-        start: this.yearMonth + '-09T16:00:00',
-        color: 'blue !important'
-    },
-    {
-        id: 999,
-        title: 'Repeating Event',
-        start: this.yearMonth + '-16T16:00:00',
-        color: 'cyan !important'
-    },
-    {
-        title: 'Conference',
-        start: this.yearMonth + '-11',
-        end: this.yearMonth + '-13',
-        color: 'black !important'
-    },
-    {
-        title: 'Meeting',
-        start: this.yearMonth + '-12T10:30:00',
-        end: this.yearMonth + '-12T12:30:00',
-        color: 'purple !important'
-    },
-    {
-        title: 'Lunch',
-        start: this.yearMonth + '-12T12:00:00',
-        color: 'orange !important'
-    },
-    {
-        title: 'Meeting',
-        start: this.yearMonth + '-12T14:30:00',
-        color: 'pink !important'
-    },
-    {
-        title: 'Happy Hour',
-        start: this.yearMonth + '-12T17:30:00',
-        color: 'orange !important'
-    },
-    {
-        title: 'Dinner',
-        start: this.yearMonth + '-12T20:00:00',
-        color: 'brown !important'
-    },
-    {
-        title: 'Birthday Party',
-        start: this.yearMonth + '-13T07:00:00',
-        color: 'pink !important'
-    },
-    {
-        title: 'Click for Google',
-        url: 'http://google.com/',
-        start: this.yearMonth + '-28',
-        color: 'purple !important'
-    }];
+  view: string = 'month';
 
-    calendarOptions: Options;
-    @ViewChild(FullCalendarModule) ucCalendar: FullCalendarModule;
-    constructor() { }
-    ngOnInit() {
-        // this.eventService.getEvents().subscribe(data => {
-          this.calendarOptions = {
-            editable: true,
-            eventLimit: false,
-            header: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'month,agendaWeek,agendaDay,listMonth'
-            },
-            selectable: true,
-            // events: [],
-            events: this.events
-            };
-        // });
+  viewDate: Date = new Date();
+
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
+
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('Deleted', event);
+      }
     }
-    clearEvents() {
-        this.events = [];
+  ];
+
+  refresh: Subject<any> = new Subject();
+
+  events: CalendarEvent[] = [
+    {
+      start: subDays(startOfDay(new Date()), 1),
+      end: addDays(new Date(), 1),
+      title: 'A 3 day event',
+      color: colors.red,
+      actions: this.actions
+    },
+    {
+      start: startOfDay(new Date()),
+      title: 'An event with no end date',
+      color: colors.yellow,
+      actions: this.actions
+    },
+    {
+      start: subDays(endOfMonth(new Date()), 3),
+      end: addDays(endOfMonth(new Date()), 3),
+      title: 'A long event that spans 2 months',
+      color: colors.blue
+    },
+    {
+      start: addHours(startOfDay(new Date()), 2),
+      end: new Date(),
+      title: 'A draggable and resizable event',
+      color: colors.yellow,
+      actions: this.actions,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      },
+      draggable: true
     }
-    loadEvents() {
-        // this.eventService.getEvents().subscribe(data => {
-        //   this.events = data;
-        // });
+  ];
+
+  activeDayIsOpen: boolean = true;
+
+  constructor(private modal: NgbModal) { }
+
+  ngOnInit() { }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+        this.viewDate = date;
+      }
     }
+  }
+
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  addEvent(): void {
+    this.events.push({
+      title: 'New event',
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
+  }
 
 }

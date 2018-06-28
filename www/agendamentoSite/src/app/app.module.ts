@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { FullCalendarModule } from 'ng-fullcalendar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule } from 'angular-calendar';
 
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminComponent } from './admin/admin.component';
 import { CalendarComponent } from './tools/calendar/calendar.component';
 
@@ -15,7 +16,9 @@ import { CalendarComponent } from './tools/calendar/calendar.component';
   ],
   imports: [
     BrowserModule,
-    FullCalendarModule
+    NgbModule.forRoot(),
+    BrowserAnimationsModule,
+    CalendarModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
