@@ -20,8 +20,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
-  CalendarEventTimesChangedEvent
+  CalendarEventTimesChangedEvent,
+  CalendarDateFormatter,
+  DAYS_OF_WEEK
 } from 'angular-calendar';
+import { CustomDateFormatter } from './custom-date-formatter';
 
 const colors: any = {
   red: {
@@ -48,7 +51,13 @@ export class CalendarComponent implements OnInit {
 
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-  view: string = 'month';
+  locale = 'pt';
+
+  weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
+
+  weekendDays: number[] = [DAYS_OF_WEEK.FRIDAY, DAYS_OF_WEEK.SATURDAY];
+
+  view = 'month';
 
   viewDate: Date = new Date();
 
@@ -109,7 +118,7 @@ export class CalendarComponent implements OnInit {
     }
   ];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen = true;
 
   constructor(private modal: NgbModal) { }
 
