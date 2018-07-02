@@ -27,13 +27,19 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.styl",
-              {
-                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
-              }
+              "node_modules/startbootstrap-sb-admin/vendor/bootstrap/css/bootstrap.min.css",
+              "node_modules/startbootstrap-sb-admin/vendor/font-awesome/css/font-awesome.min.css",
+              "node_modules/startbootstrap-sb-admin/css/sb-admin.css",
+              "node_modules/fullcalendar/dist/fullcalendar.min.css",
+              "node_modules/fullcalendar/dist/fullcalendar.print.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/startbootstrap-sb-admin/vendor/jquery/jquery.min.js",
+              "node_modules/startbootstrap-sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js",
+              "node_modules/startbootstrap-sb-admin/vendor/jquery-easing/jquery.easing.min.js",
+              "node_modules/startbootstrap-sb-admin/js/sb-admin.min.js"
+            ]
           },
           "configurations": {
             "production": {
