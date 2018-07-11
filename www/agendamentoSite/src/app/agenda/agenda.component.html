@@ -1,5 +1,43 @@
+<table class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <td>titulo</td>
+      <td>inicio</td>
+      <td>fim</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ev of eventos | async">
+      <td>{{ ev.title }}</td>
+      <td>{{ ev.start }}</td>
+      <td>{{ ev.end }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <td>titulo</td>
+      <td>inicio</td>
+      <td>fim</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ev of data">
+      <td>{{ ev.title }}</td>
+      <td>{{ ev.start }}</td>
+      <td>{{ ev.end }}</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>Display event : {{displayEvent | json}}</p>
 <div *ngIf="calendarOptions">
-    <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
-        (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
+    <ng-fullcalendar #ucCalendar [options]="calendarOptions"
+    (eventClick)="eventClick($event.detail)"
+    (eventDrop)="updateEvent($event.detail)"
+    (eventResize)="updateEvent($event.detail)"
+    (clickButton)="clickButton($event.detail)">
+      </ng-fullcalendar>
 </div>

@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyAhk6XmHnfRcIpW7Ut2EkMtALtcy1KOjsM',
+    authDomain: 'agendamento-aa557.firebaseapp.com',
+    databaseURL: 'https://agendamento-aa557.firebaseio.com',
+    projectId: 'agendamento-aa557',
+    storageBucket: 'agendamento-aa557.appspot.com',
+    messagingSenderId: '1005746404346'
+  }
 };
 
 /*
